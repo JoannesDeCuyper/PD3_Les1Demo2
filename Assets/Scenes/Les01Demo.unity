@@ -297,6 +297,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1669701342}
   - component: {fileID: 1669701343}
+  - component: {fileID: 1669701344}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -334,7 +335,18 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1669701344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1669701341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbe9d28d8a8da5c4688299d1f1e35313, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1772598494
 GameObject:
   m_ObjectHideFlags: 0
@@ -445,7 +457,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1925993459}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 1295190796}
