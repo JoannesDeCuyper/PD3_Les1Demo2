@@ -7,8 +7,16 @@ using UnityEngine.Assertions;
 
 public class CharacterControllerBehaviour : MonoBehaviour
 {
+    [SerializeField]
+    private Transform _absoluteTransform;
+
+    [SerializeField]
+    private float _acceleration = 3; //[m/s^2]
+
+
     private CharacterController _characterController;
     private Vector3 _velocity = Vector3.zero; //[m/s]
+    private Vector3 _inputMovement;
 
     void Start()
     {
@@ -25,16 +33,69 @@ public class CharacterControllerBehaviour : MonoBehaviour
 
         Assert.IsNotNull(_characterController, "ERROR : charactercontrollerBehaviour needs a charactercontroller component");*/
 	}
-	
-	void Update ()
-    {   
-        if(!_characterController.isGrounded)
-        {
-            _velocity += Physics.gravity * Time.deltaTime;
-        }
-        
-        Vector3 movement = _velocity * Time.deltaTime;
 
-        _characterController.Move(movement);
+    //fixedUpdate --> physics
+
+    private void Update()
+    {
+        _inputMovement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+    }
+
+    void FixedUpdate ()
+    {
+        ApplyGround();
+
+        ApplyGravity();
+
+        ApplyMovement();
+
+        DoMovement();
 	}
+
+    private void ApplyGround()
+    {
+        //past effect van de grond toe
+        if (_characterController.isGrounded)
+        {
+            _velocity -= Vector3.Project(_velocity, Physics.gravity);
+        }
+    }
+    private void ApplyGravity()
+    {
+        //past effect van de gravity
+        if (!_characterController.isGrounded)
+        {
+            _velocity += Physics.gravity * Time.fixedDeltaTime;
+        }
+    }
+
+    private void ApplyMovement()
+    {
+        if(_characterController.isGrounded)
+        {
+            //or
+            //xzForward = new Vector3(_absoluteTransform.forward.x, 0, _absoluteTransform.forward.z);
+
+            //or
+            //Vector3 xzForward = _absoluteTransform.forward;
+            //xzForward.y = 0;
+
+            Vector3 xzForward = Vector3.Scale(_absoluteTransform.forward, new Vector3(1, 0, 1));
+
+            Quaternion relativeRotation = Quaternion.LookRotation(xzForward);
+
+            Vector3 relativeMovement = relativeRotation * _inputMovement;
+
+            _velocity += relativeMovement * _acceleration * Time.deltaTime;
+
+        }
+    }
+
+    private void DoMovement()
+    {
+        //beweging
+        Vector3 displacement = _velocity * Time.fixedDeltaTime;
+
+        _characterController.Move(displacement);
+    }
 }
