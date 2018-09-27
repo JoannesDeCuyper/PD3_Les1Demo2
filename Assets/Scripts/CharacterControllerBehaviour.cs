@@ -13,6 +13,8 @@ public class CharacterControllerBehaviour : MonoBehaviour
     [SerializeField]
     private float _acceleration = 3; //[m/s^2]
 
+    [SerializeField]
+    private float _dragOnGround = 1.0f; //getal tussen 0 en 1
 
     private CharacterController _characterController;
     private Vector3 _velocity = Vector3.zero; //[m/s]
@@ -48,6 +50,8 @@ public class CharacterControllerBehaviour : MonoBehaviour
         ApplyGravity();
 
         ApplyMovement();
+
+        ApplyDragOnGround();
 
         DoMovement();
 	}
@@ -86,8 +90,17 @@ public class CharacterControllerBehaviour : MonoBehaviour
 
             Vector3 relativeMovement = relativeRotation * _inputMovement;
 
-            _velocity += relativeMovement * _acceleration * Time.deltaTime;
+            _velocity += relativeMovement * _acceleration * Time.fixedDeltaTime;
 
+        }
+    }
+
+    private void ApplyDragOnGround()
+    {
+        //or make use of Lerp
+        if(_characterController.isGrounded)
+        {
+            _velocity *= (1 - Time.fixedDeltaTime * _dragOnGround);
         }
     }
 
